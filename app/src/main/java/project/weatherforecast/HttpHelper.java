@@ -27,7 +27,7 @@ public class HttpHelper {
             httpURLConnection.connect();
         } catch (IOException e) {
             e.printStackTrace();
-            return  null;
+            return null;
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         String new_line, jsonString;

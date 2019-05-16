@@ -1,5 +1,6 @@
 package project.weatherforecast;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.SystemClock;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,12 +48,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     String full_url = BASE_URL;
     String prev_jedinica = "C";
 
-    final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM 'u' hh:mm", Locale.US);;
+    final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM 'u' hh:mm", Locale.US);
     final Calendar calendar = Calendar.getInstance();
     final Date date = calendar.getTime();
     Resources resources;
     HttpHelper httpHelper;
     double temperature;
+    final Context mContext = this;
     CityWeatherInfo.CityWeather cityWeather;
 
     @Override
@@ -148,14 +152,25 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    fetchCityWeather();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshWeatherView();
-                        }
-                    });
-                    MainActivity.dbHelper.insert(cityWeather);
+                    try {
+                        fetchCityWeather();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshWeatherView();
+                            }
+                        });
+                        MainActivity.dbHelper.insert(cityWeather);
+                    } catch (NullPointerException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mContext, "No internet connection.\nWeather could not be fetched.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }).start();
         } else {
@@ -164,6 +179,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         }
         SystemClock.sleep(500);
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -230,14 +246,25 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        fetchCityWeather();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshWeatherView();
-                            }
-                        });
-                        MainActivity.dbHelper.insert(cityWeather);
+                        try {
+                            fetchCityWeather();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refreshWeatherView();
+                                }
+                            });
+                            MainActivity.dbHelper.insert(cityWeather);
+                        } catch (NullPointerException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mContext, "No internet connection.\nWeather could not be fetched.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }).start();
                 break;
@@ -285,41 +312,34 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         tDan.setText(dan);
     }
 
-    private void fetchCityWeather() {
-        try {
-            Log.d("JSON OBJECT ACQUIRING:", "Zaba");
-            final JSONObject jsonObject = httpHelper.getJSONObjectFromURL(full_url);
-            Log.d("JSON OBJECT ACQUIRING:", "full_url");
-            final JSONObject mainObject = jsonObject.getJSONObject("main"); // used for temperature humidity and pressure
-            Log.d("JSON OBJECT ACQUIRING:", "main");
-            final JSONObject windObject = jsonObject.getJSONObject("wind");
-            Log.d("JSON OBJECT ACQUIRING:", "wind");
-            final JSONObject sysObject = jsonObject.getJSONObject("sys"); //used for sunrise and sunset
-            Log.d("JSON OBJECT ACQUIRING:", "sys");
-            final JSONArray weatherArray = jsonObject.getJSONArray("weather");
-            Log.d("JSON OBJECT ACQUIRING:", "weather");
-            final JSONObject weatherObject = weatherArray.getJSONObject(0);
-            Log.d("JSON OBJECT ACQUIRING:", "weatherObject");
+    private void fetchCityWeather() throws NullPointerException, JSONException, IOException{
+        Log.d("JSON OBJECT ACQUIRING:", "Zaba");
+        final JSONObject jsonObject = httpHelper.getJSONObjectFromURL(full_url);
+        Log.d("JSON OBJECT ACQUIRING:", "full_url");
+        final JSONObject mainObject = jsonObject.getJSONObject("main"); // used for temperature humidity and pressure
+        Log.d("JSON OBJECT ACQUIRING:", "main");
+        final JSONObject windObject = jsonObject.getJSONObject("wind");
+        Log.d("JSON OBJECT ACQUIRING:", "wind");
+        final JSONObject sysObject = jsonObject.getJSONObject("sys"); //used for sunrise and sunset
+        Log.d("JSON OBJECT ACQUIRING:", "sys");
+        final JSONArray weatherArray = jsonObject.getJSONArray("weather");
+        Log.d("JSON OBJECT ACQUIRING:", "weather");
+        final JSONObject weatherObject = weatherArray.getJSONObject(0);
+        Log.d("JSON OBJECT ACQUIRING:", "weatherObject");
 
-            Log.d("JSON OBJECT ACQUIRING:", "Fetched");
-            long dateUnix = date.getTime();
-            temperature = Double.parseDouble(mainObject.getString("temp"));
-            double pressure = Double.parseDouble(mainObject.getString("pressure"));
-            double humidity = Double.parseDouble(mainObject.getString("humidity"));
-            int windDegrees = Integer.parseInt(windObject.getString("deg"));
-            double windSpeed = Double.parseDouble(windObject.getString("speed"));
-            long sunrise = Long.parseLong(sysObject.getString("sunrise"));
-            long sunset = Long.parseLong(sysObject.getString("sunset"));
-            String weatherIconString = weatherObject.getString("icon");
-            Log.d("JSON OBJECT ACQUIRING:", "Over");
+        Log.d("JSON OBJECT ACQUIRING:", "Fetched");
+        long dateUnix = date.getTime();
+        temperature = Double.parseDouble(mainObject.getString("temp"));
+        double pressure = Double.parseDouble(mainObject.getString("pressure"));
+        double humidity = Double.parseDouble(mainObject.getString("humidity"));
+        int windDegrees = Integer.parseInt(windObject.getString("deg"));
+        double windSpeed = Double.parseDouble(windObject.getString("speed"));
+        long sunrise = Long.parseLong(sysObject.getString("sunrise"));
+        long sunset = Long.parseLong(sysObject.getString("sunset"));
+        String weatherIconString = weatherObject.getString("icon");
+        Log.d("JSON OBJECT ACQUIRING:", "Over");
 
-            cityWeather = new CityWeatherInfo.CityWeather(dateUnix, cityName, temperature, pressure, humidity, sunrise, sunset, windSpeed, windDegrees, weatherIconString);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        cityWeather = new CityWeatherInfo.CityWeather(dateUnix, cityName, temperature, pressure, humidity, sunrise, sunset, windSpeed, windDegrees, weatherIconString);
     }
 
     @Override
@@ -346,6 +366,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
     }
+
 
     @Override
     protected void onRestart() {
