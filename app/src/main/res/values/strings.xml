@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Weather Forecast</string>
+    <string name="button_prikazi_str">Dodaj grad</string>
+    <string name="weather_str">Lokacija za prikaz vremenske prognoze:\u0020</string>
+    <string name="lokacija_str">LOKACIJA:\u0020</string>
+    <string name="grad_ili_lokacija_str">Unesi novi grad</string>
+    <string name="dan_str">DAN:\u0020</string>
+    <string name="temperatura_str">TEMPERATURA:\u0020</string>
+    <string name="pritisak_str">PRITISAK:\u0020</string>
+    <string name="vlaznost_str">VLAŽNOST VAZDUHA:\u0020</string>
+    <string name="izlazak_str">IZLAZAK SUNCA:\u0020</string>
+    <string name="zalazak_str">ZALAZAK SUNCA:\u0020</string>
+    <string name="brzina_str">BRZINA VETRA:\u0020</string>
+    <string name="pravac_str">PRAVAC:\u0020</string>
+    <string name="erorr_location">ERROR_LOCATION</string>
+    <string name="statistika_str">STATISTIKA</string>
+    <string name="poslednja_nedelja_str">POSLEDNJA NEDELJA:</string>
+    <string name="ponedeljak_str">PONEDELJAK</string>
+    <string name="utorak_str">UTORAK</string>
+    <string name="sreda_str">SREDA</string>
+    <string name="cetvrak_str">ČETVRTAK</string>
+    <string name="petak_str">PETAK</string>
+    <string name="subota_str">SUBOTA</string>
+    <string name="nedelja_str">NEDELJA</string>
+    <string name="min_temperatura_str">MIN TEMPERATURA:</string>
+    <string name="max_temperatura_str">MAX TEMPERATURA:</string>
+
+    <string-array name="jedinica_str_arr">
+        <item>C</item>
+        <item>F</item>
+    </string-array>
+
+    <string-array name="dan_srp_str_arr">
+        <item>PONEDELJAK</item>
+        <item>UTORAK</item>
+        <item>SREDA</item>
+        <item>ČETVRTAK</item>
+        <item>PETAK</item>
+        <item>SUBOTA</item>
+        <item>NEDELJA</item>
+    </string-array>
+
+    <string-array name="start_gradovi_str_arr">
+        <item>Novi Sad</item>
+        <item>Beograd</item>
+        <item>London</item>
+    </string-array>
+</resources>

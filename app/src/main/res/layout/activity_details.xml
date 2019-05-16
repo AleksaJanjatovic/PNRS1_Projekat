@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsActivity"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/lokacija_str"
+        android:textColor="@color/colorBlack"
+        android:textSize="15sp"
+        android:gravity="bottom"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/textViewLokacija"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/dan_str"
+        android:textColor="@color/colorBlack"
+        android:textSize="15sp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/textViewDan"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/statistika_str"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPurple"
+            android:id="@+id/buttonStatistika"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/refresh_button"
+            android:id="@+id/imageButtonRefresh"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:id="@+id/buttonTemperatura"
+            android:text="Temperatura" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:id="@+id/buttonIzlazakIZalazak"
+            android:text="Izlazak i zalazak sunca"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:id="@+id/buttonVetar"
+            android:text="Vetar"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:id="@+id/frameLayoutDetails">
+
+        <LinearLayout
+            android:baselineAligned="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:weightSum="10"
+            android:id="@+id/linearLayoutTemperatura">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="25"
+                    android:layout_marginLeft="52dp"
+                    android:layout_marginRight="52dp"
+                    android:id="@+id/imageViewWeatherPNG"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="10"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/temperatura_str"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="bottom"
+                    android:id="@+id/textViewTemperatura"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="10"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/pritisak_str"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:id="@+id/textViewPritisak"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="20"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/vlaznost_str"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="top"
+                    android:id="@+id/textViewVlaznostVazduha"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:layout_gravity="center"
+                    android:text="Jedinica: "
+                    android:gravity="center|right"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20dp"
+                    android:layout_marginBottom="90dp"
+                    android:id="@+id/textViewJedinica"/>
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:layout_marginBottom="170dp"
+                    android:id="@+id/spinnerJedinica">
+
+
+                </Spinner>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:weightSum="20"
+            android:id="@+id/linearLayoutIzlazakIZalazak">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="7"
+                android:text="@string/izlazak_str"
+                android:textColor="@color/colorBlack"
+                android:gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/textViewIzlazakSunca"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="13"
+                android:text="@string/zalazak_str"
+                android:textColor="@color/colorBlack"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/textViewZalazakSunca"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:weightSum="20"
+            android:id="@+id/linearLayoutVetar">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="7"
+                android:text="@string/brzina_str"
+                android:textColor="@color/colorBlack"
+                android:gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/textViewBrzinaVetra"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="13"
+                android:text="@string/pravac_str"
+                android:textColor="@color/colorBlack"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/textViewPravac"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

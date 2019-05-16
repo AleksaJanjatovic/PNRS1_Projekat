@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:text="@string/app_name"
+        android:textSize="40dp"
+        android:gravity="center"
+        android:id="@+id/textWeatherForecast">
+        <requestFocus/>
+    </TextView>j
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:weightSum="20"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="13"
+            android:hint="@string/grad_ili_lokacija_str"
+            android:textAlignment="center"
+            android:autoSizeTextType="uniform"
+            android:id="@+id/textEditGradIliLokacija"
+            android:singleLine="true"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:textSize="17dp"
+            android:text="@string/button_prikazi_str"
+            android:background="@color/colorGray"
+            android:id="@+id/buttonDodajGrad"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="36"
+        android:visibility="gone"
+        android:id="@+id/textViewEmpty"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="18"
+        android:id="@+id/cityList">
+    </ListView>
+
+</LinearLayout>
