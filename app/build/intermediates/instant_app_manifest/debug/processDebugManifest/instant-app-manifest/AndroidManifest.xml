@@ -21,6 +21,11 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
+        <service
+            android:name="project.weatherforecast.CustomService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity android:name="project.weatherforecast.StatisticsActivity" />
         <activity
             android:name="project.weatherforecast.DetailsActivity"

@@ -41,9 +41,10 @@ public class HttpHelper {
 
         jsonString = sb.toString();
         Log.d("HTTP GET", "JSON obj-" + jsonString);
+
         int responseCode = httpURLConnection.getResponseCode();
         httpURLConnection.disconnect();
+        return responseCode == SUCCESS  ? new JSONObject(jsonString) : null;
 
-        return responseCode == SUCCESS ? new JSONObject(jsonString) : null;
     }
 }

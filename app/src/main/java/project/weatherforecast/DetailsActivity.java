@@ -1,8 +1,11 @@
 package project.weatherforecast;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,14 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,6 +55,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     double temperature;
     final Context mContext = this;
     CityWeatherInfo.CityWeather cityWeather;
+    ServiceConnection connection;
+    boolean mBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +94,25 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         /* INTERFACE END */
 
         /* UTILITIES SETUP BEGIN */
+        connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                CustomService.CustomBinder binder = (CustomService.CustomBinder) service;
+                weatherRefresher = binder.getService();
+                mBound = true;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mBound = false;
+            }
+        };
         httpHelper = new HttpHelper();
         resources = getResources();
+        Intent serviceIntent = new Intent(this, CustomService.class);
+        startService(serviceIntent);
+
+        //bindService( new Intent(this, CustomService.class), connection, Context.BIND_AUTO_CREATE);
         /* UTILITIES SETUP END */
 
         /* CONFIGURATING VIEW BEGIN */
@@ -332,7 +350,12 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         temperature = Double.parseDouble(mainObject.getString("temp"));
         double pressure = Double.parseDouble(mainObject.getString("pressure"));
         double humidity = Double.parseDouble(mainObject.getString("humidity"));
-        int windDegrees = Integer.parseInt(windObject.getString("deg"));
+        int windDegrees;
+        if(windObject.has("deg")) {
+            windDegrees = Integer.parseInt(windObject.getString("deg"));
+        } else {
+            windDegrees = 10;
+        }
         double windSpeed = Double.parseDouble(windObject.getString("speed"));
         long sunrise = Long.parseLong(sysObject.getString("sunrise"));
         long sunset = Long.parseLong(sysObject.getString("sunset"));
@@ -355,6 +378,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //weatherRefresher.unbindService(connection);
     }
 
     @Override
@@ -365,11 +389,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+//        refreshWeatherView();
     }
-
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        refreshWeatherView();
     }
+
+
 }
