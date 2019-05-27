@@ -647,6 +647,7 @@ drawable notification_bg_low_normal
 drawable notification_bg_low_pressed
 drawable notification_bg_normal
 drawable notification_bg_normal_pressed
+drawable notification_icon
 drawable notification_icon_background
 drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
@@ -712,6 +713,7 @@ id buttonDodajGrad
 id buttonIzlazakIZalazak
 id buttonPanel
 id buttonStatistika
+id buttonStopService
 id buttonTemperatura
 id buttonVetar
 id center
@@ -994,6 +996,7 @@ string search_menu_title
 string sreda_str
 string statistika_str
 string status_bar_notification_info_overflow
+string stop_service_str
 string subota_str
 string temperatura_str
 string utorak_str

@@ -7,22 +7,22 @@
     format="10"
     ir-eligibility="FIELD_TYPE_CHANGE"
     plugin-version="3.3.1"
-    timestamp="1558798673044"
+    timestamp="1558895348553"
     token="491531719583908570"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="238" />
+        duration="237" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="22" />
+        duration="16" />
     <task
         name="verifier"
-        duration="5" />
+        duration="4" />
 
     <artifact
         location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
@@ -30,11 +30,11 @@
 
     <build
         build-mode="FULL"
-        timestamp="1558791828681"
+        timestamp="1558889679594"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
-            type="SPLIT" />
+            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+            type="SPLIT_MAIN" />
         <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
             type="SPLIT" />
@@ -63,58 +63,52 @@
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
             type="SPLIT" />
         <artifact
+            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
+            type="SPLIT" />
+        <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
         <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\dep\dependencies.apk"
             type="SPLIT" />
-        <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-            type="SPLIT_MAIN" />
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="COMPATIBLE"
-        timestamp="1558792366409"
+        ir-eligibility="R_CLASS_CHANGE"
+        timestamp="1558893786500"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\dep\dependencies.apk"
+            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
             type="SPLIT" />
         <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
             type="SPLIT" />
         <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
-            type="SPLIT" />
-        <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
             type="SPLIT" />
         <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
+            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
             type="SPLIT" />
         <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
             type="SPLIT" />
         <artifact
+            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
+            type="SPLIT" />
+        <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
-            type="SPLIT" />
-        <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
-            type="SPLIT" />
-        <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
             type="SPLIT" />
         <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
         <artifact
-            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
-            type="SPLIT_MAIN" />
+            location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
+            type="SPLIT" />
     </build>
     <build
         build-mode="COLD"
         ir-eligibility="FIELD_TYPE_CHANGE"
-        timestamp="1558798673044"
+        timestamp="1558895348553"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="F:\Aleksa\Desktop_Podaci\Dokumenti\Faks\PNRS1\WeatherForecast\app\build\intermediates\split-apk\debug\slices\slice_9.apk"

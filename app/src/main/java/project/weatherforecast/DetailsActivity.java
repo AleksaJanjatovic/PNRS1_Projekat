@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,7 @@ import java.util.Locale;
 
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button bTemperatura, bIzlazakIZalazak, bVetar, bStatistika;
+    Button bTemperatura, bIzlazakIZalazak, bVetar, bStatistika, bStopService;
     LinearLayout lTemperatura, lIzlazakIZalazak, lVetar;
     Spinner spinnerJedinica;
     TextView tLokacija, tDan, tTemperatura, tPritisak,
@@ -83,6 +84,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         imageWeatherPNG = findViewById(R.id.imageViewWeatherPNG);
         bStatistika = findViewById(R.id.buttonStatistika);
         bRefreshButton = findViewById(R.id.imageButtonRefresh);
+        bStopService = findViewById(R.id.buttonStopService);
         /* VIEW INITIALIZATION END */
 
         /* INTERFACE BEGIN */
@@ -91,6 +93,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         bVetar.setOnClickListener(this);
         bStatistika.setOnClickListener(this);
         bRefreshButton.setOnClickListener(this);
+        bStopService.setOnClickListener(this);
         /* INTERFACE END */
 
         /* UTILITIES SETUP BEGIN */
@@ -98,12 +101,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 CustomService.CustomBinder binder = (CustomService.CustomBinder) service;
-                weatherRefresher = binder.getService();
+                //bindService(new Intent(mContext, CustomService.class), connection, Context.BIND_AUTO_CREATE);
                 mBound = true;
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
+                //unbindService(connection);
                 mBound = false;
             }
         };
@@ -251,6 +255,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 bVetar.setEnabled(false);
                 break;
 
+            case R.id.buttonStopService:
+                stopService(new Intent(this, CustomService.class));
+                break;
+
             case R.id.buttonStatistika:
                 Intent intent = new Intent(this, StatisticsActivity.class);
                 intent.putExtra(resources.getString(R.string.lokacija_str), cityName);
@@ -331,28 +339,22 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void fetchCityWeather() throws NullPointerException, JSONException, IOException{
-        Log.d("JSON OBJECT ACQUIRING:", "Zaba");
+        Log.d("JSON OBJECT ACQUIRING:", "STARTED");
         final JSONObject jsonObject = httpHelper.getJSONObjectFromURL(full_url);
-        Log.d("JSON OBJECT ACQUIRING:", "full_url");
         final JSONObject mainObject = jsonObject.getJSONObject("main"); // used for temperature humidity and pressure
-        Log.d("JSON OBJECT ACQUIRING:", "main");
         final JSONObject windObject = jsonObject.getJSONObject("wind");
-        Log.d("JSON OBJECT ACQUIRING:", "wind");
         final JSONObject sysObject = jsonObject.getJSONObject("sys"); //used for sunrise and sunset
-        Log.d("JSON OBJECT ACQUIRING:", "sys");
         final JSONArray weatherArray = jsonObject.getJSONArray("weather");
-        Log.d("JSON OBJECT ACQUIRING:", "weather");
         final JSONObject weatherObject = weatherArray.getJSONObject(0);
-        Log.d("JSON OBJECT ACQUIRING:", "weatherObject");
+        Log.d("JSON OBJECT ACQUIRING:", "FINISHED. FETCHED CITY: " + cityName);
 
-        Log.d("JSON OBJECT ACQUIRING:", "Fetched");
         long dateUnix = date.getTime();
         temperature = Double.parseDouble(mainObject.getString("temp"));
         double pressure = Double.parseDouble(mainObject.getString("pressure"));
         double humidity = Double.parseDouble(mainObject.getString("humidity"));
-        int windDegrees;
+        double windDegrees;
         if(windObject.has("deg")) {
-            windDegrees = Integer.parseInt(windObject.getString("deg"));
+            windDegrees = Double.parseDouble(windObject.getString("deg"));
         } else {
             windDegrees = 10;
         }
@@ -378,7 +380,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //weatherRefresher.unbindService(connection);
     }
 
     @Override
@@ -389,7 +390,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-//        refreshWeatherView();
+        refreshWeatherView();
     }
 
     @Override

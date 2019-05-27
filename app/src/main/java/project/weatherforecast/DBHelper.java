@@ -40,7 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_SUNRISE + " INTEGER, " +
                 COLUMN_SUNSET + " INTEGER, " +
                 COLUMN_WINDSPEED + " REAL, " +
-                COLUMN_WINDDIRECTION + " INTEGER, " +
+                COLUMN_WINDDIRECTION + " REAL, " +
                 COLUMN_WEATHER_ICON_STRING + " TEXT);");
     }
 
@@ -116,7 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
         long sunrise = cursor.getLong(cursor.getColumnIndex(COLUMN_SUNRISE));
         long sunset = cursor.getLong(cursor.getColumnIndex(COLUMN_SUNSET));
         double windSpeed = cursor.getDouble(cursor.getColumnIndex(COLUMN_WINDSPEED));
-        int windDirection = cursor.getInt(cursor.getColumnIndex(COLUMN_WINDDIRECTION));
+        double windDirection = cursor.getDouble(cursor.getColumnIndex(COLUMN_WINDDIRECTION));
         String weatherIconString = cursor.getString(cursor.getColumnIndex(COLUMN_WEATHER_ICON_STRING));
 
         return new CityWeatherInfo.CityWeather(dateAndTime, cityName, temperature, pressure,

@@ -40,7 +40,7 @@ public final class CityWeatherInfo {
         long mSunrise;
         long mSunset;
         double mWindSpeed;
-        int mWindDirection;
+        double mWindDirection;
         String mWeatherIconString;
 
         public CityWeather(long mDateAndTime,
@@ -51,7 +51,7 @@ public final class CityWeatherInfo {
                             long mSunrise,
                             long mSunset,
                             double mWindSpeed,
-                            int mWindDirection, String mWeatherIcon) {
+                            double mWindDirection, String mWeatherIcon) {
             this.mDateAndTime = mDateAndTime;
             this.mCityName = mCityName;
             this.mTemperature = mTemperature;
@@ -96,7 +96,7 @@ public final class CityWeatherInfo {
             return mWindSpeed;
         }
 
-        public int getWindDirection() {
+        public double getWindDirection() {
             return mWindDirection;
         }
 
@@ -136,7 +136,7 @@ public final class CityWeatherInfo {
             this.mWindSpeed = mWindSpeed;
         }
 
-        public void setWindDirection(int mWindDirection) {
+        public void setWindDirection(double mWindDirection) {
             this.mWindDirection = mWindDirection;
         }
 

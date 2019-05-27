@@ -24,7 +24,7 @@
     <string name="nedelja_str">NEDELJA</string>
     <string name="min_temperatura_str">MIN TEMPERATURA:</string>
     <string name="max_temperatura_str">MAX TEMPERATURA:</string>
-
+    <string name="stop_service_str">STOP SERVICE</string>
     <string-array name="jedinica_str_arr">
         <item>C</item>
         <item>F</item>
