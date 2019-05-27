@@ -1,18 +1,20 @@
 package project.weatherforecast;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,8 +30,9 @@ public class CustomService extends Service {
     private String mURL;
     private static DBHelper dbHelper = MainActivity.dbHelper;
     private NotificationManager mManager;
-    private Notification mNotification;
-
+    private NotificationChannel mChannel;
+    private NotificationCompat.Builder mBuilder;
+   // private PendingIntent mPendingIntent;
     private boolean mThreadStarted = false;
 
     public CustomService() {
@@ -50,13 +53,12 @@ public class CustomService extends Service {
     public void onCreate() {
         super.onCreate();
         mDate = Calendar.getInstance().getTime();
-        mNotification = new Notification.Builder(this)
-                .setContentTitle("Weather Forecast")
-                .setContentText("DataBase updated!")
-                .setSmallIcon(R.drawable.w01d)
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, DetailsActivity.class), 0))
-                .setAutoCancel(true).build();
-        mManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mManager = (NotificationManager) CustomService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+    //    mPendingIntent = PendingIntent.getActivity(CustomService.this, 0, new Intent(CustomService.this, DetailsActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel("project.weatherforecast", "channel", NotificationManager.IMPORTANCE_DEFAULT);
+            mManager.createNotificationChannel(mChannel);
+        }
         mHttpHelper = new HttpHelper();
         mThread = new Thread(new Runnable() {
             @Override
@@ -70,9 +72,9 @@ public class CustomService extends Service {
                     try {
                         Log.d("AUTO CITY FETCHING:", "STARTED");
                         CityWeatherInfo.CityWeather[] cityWeathers = dbHelper.readAllCityWeathers();
-                        for(int i = 0; i < cityWeathers.length; i++) {
+                        for (CityWeatherInfo.CityWeather cityWeather1 : cityWeathers) {
                             Thread.sleep(5000);
-                            String cityName = cityWeathers[i].getCityName();
+                            String cityName = cityWeather1.getCityName();
                             mURL = DetailsActivity.BASE_URL + CityWeatherInfo.WeatherFormater.formatCityNameForURL(cityName) + DetailsActivity.API_ID;
 
                             Log.d("JSON OBJECT ACQUIRING:", "STARTED");
@@ -89,7 +91,7 @@ public class CustomService extends Service {
                             double pressure = Double.parseDouble(mainObject.getString("pressure"));
                             double humidity = Double.parseDouble(mainObject.getString("humidity"));
                             double windDegrees;
-                            if(windObject.has("deg")) {
+                            if (windObject.has("deg")) {
                                 windDegrees = Double.parseDouble(windObject.getString("deg"));
                             } else {
                                 windDegrees = 10;
@@ -105,9 +107,23 @@ public class CustomService extends Service {
                             dbHelper.deleteCityWeather(cityName);
                             dbHelper.insert(cityWeather);
                         }
-                        mManager.notify(0, mNotification);
                         Log.d("AUTO CITY FETCHING:", "ENDED");
                         Thread.sleep(PRESENTATION_PERIOD);
+
+                        mBuilder = new NotificationCompat.Builder(CustomService.this, NotificationChannel.DEFAULT_CHANNEL_ID);
+                        mBuilder.setChannelId("project.weatherforecast");
+                        mBuilder.setAutoCancel(true)
+                                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                                .setWhen(System.currentTimeMillis())
+                                .setSmallIcon(R.drawable.notification_icon)
+                                .setTicker("Weather Forecast")
+                                .setContentTitle("Weather Forecast")
+                                .setContentText("Database updated")
+                                .setContentInfo("INFO");
+                                //.setContentIntent(mPendingIntent);
+
+                        mManager.notify(1, mBuilder.build());
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
