@@ -1,18 +1,18 @@
 package project.weatherforecast;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,10 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mListAdapter = new ItemAdapter(this);
         mListGradovi.setAdapter(mListAdapter);
 
-        CityWeatherInfo.CityWeather[] mCityWeathers = dbHelper.readAllCityWeathers();
+        int day = Integer.parseInt(new SimpleDateFormat("u").format(Calendar.getInstance().getTime().getTime()));
+        CityWeatherInfo.CityWeather[] cityWeathers = dbHelper.readAllCityWeathers();
         try {
-            for(int i = 0; i < mCityWeathers.length; i++) {
-                mListAdapter.addCity(new CityListItem(mCityWeathers [i]));
+            for(CityWeatherInfo.CityWeather iterator : cityWeathers ) {
+                if(iterator.getDay() == day) {
+                    mListAdapter.addCity(new CityListItem(iterator));
+                }
             }
         } catch (NullPointerException e) {
             e.printStackTrace();

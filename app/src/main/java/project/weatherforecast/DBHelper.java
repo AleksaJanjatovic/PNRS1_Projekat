@@ -8,10 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "weather.dp";
-    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "weather_day.dp";
+    public static final int DATABASE_VERSION = 3;
 
     public static final String TABLE_NAME = "Weather";
+    public static final String COLUMN_DAY = "Day";
     public static final String COLUMN_DATE_AND_TIME = "DateAndTime";
     public static final String COLUMN_CITY_NAME = "CityName";
     public static final String COLUMN_TEMPERATURE = "Temperature";
@@ -23,8 +24,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_WINDDIRECTION = "WindDirection";
     public static final String COLUMN_WEATHER_ICON_STRING = "WeatherIcon";
 
-    private SQLiteDatabase mSQLDB = null;
-
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -32,6 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
+                COLUMN_DAY + " INTEGER, " +
                 COLUMN_CITY_NAME + " TEXT, " +
                 COLUMN_DATE_AND_TIME + " INTEGER, " +
                 COLUMN_TEMPERATURE + " REAL, " +
@@ -51,9 +51,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void insert(CityWeatherInfo.CityWeather cityWeather) {
         SQLiteDatabase db = getWritableDatabase();
-
         ContentValues values = new ContentValues();
+
         values.put(COLUMN_CITY_NAME, cityWeather.getCityName());
+        values.put(COLUMN_DAY, CityWeatherInfo.WeatherFormater.extractDayFromUTCTime(cityWeather.getDateAndTime()));
         values.put(COLUMN_DATE_AND_TIME, cityWeather.getDateAndTime());
         values.put(COLUMN_TEMPERATURE, cityWeather.getTemperature());
         values.put(COLUMN_PRESSURE, cityWeather.getPressure());
@@ -68,20 +69,22 @@ public class DBHelper extends SQLiteOpenHelper {
         close();
     }
 
-    public CityWeatherInfo.CityWeather readCityWeather(String cityNameKey) {
+    public CityWeatherInfo.CityWeather readCityWeather(String cityNameKey, int day) {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME, null,
                 COLUMN_CITY_NAME + "=?", new String[] {cityNameKey},
                 null, null, null);
-        cursor.moveToFirst();
         if(cursor.getCount() <= 0) {
             return null;
         }
-        CityWeatherInfo.CityWeather cityWeather = createCityWeather(cursor);
-
-        close();
-        return cityWeather;
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            if(cursor.getInt(cursor.getColumnIndex(COLUMN_DAY)) == day) {
+                close();
+                return createCityWeather(cursor);
+            }
+        }
+        return null;
     }
 
     public CityWeatherInfo.CityWeather[] readAllCityWeathers() {
@@ -101,26 +104,41 @@ public class DBHelper extends SQLiteOpenHelper {
         return allCityWeathers;
     }
 
-    public void deleteCityWeather(String cityName) {
+    public void deleteCityWeathers(String cityName) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_CITY_NAME + "=?", new String[] {cityName});
         close();
     }
 
+    public void deleteCityWeather(String cityName, int day) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_NAME, COLUMN_CITY_NAME + "=?" + " AND " + COLUMN_DAY + "=?", new String[] {cityName, Integer.toString(day)});
+        close();
+    }
+
     private CityWeatherInfo.CityWeather createCityWeather(Cursor cursor) {
         String cityName = cursor.getString(cursor.getColumnIndex(COLUMN_CITY_NAME));
-        long dateAndTime = cursor.getLong(cursor.getColumnIndex(COLUMN_DATE_AND_TIME));
-        double temperature = cursor.getDouble(cursor.getColumnIndex(COLUMN_TEMPERATURE));
-        double pressure = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRESSURE));
-        double humidity = cursor.getDouble(cursor.getColumnIndex(COLUMN_HUMIDITY));
-        long sunrise = cursor.getLong(cursor.getColumnIndex(COLUMN_SUNRISE));
-        long sunset = cursor.getLong(cursor.getColumnIndex(COLUMN_SUNSET));
-        double windSpeed = cursor.getDouble(cursor.getColumnIndex(COLUMN_WINDSPEED));
-        double windDirection = cursor.getDouble(cursor.getColumnIndex(COLUMN_WINDDIRECTION));
-        String weatherIconString = cursor.getString(cursor.getColumnIndex(COLUMN_WEATHER_ICON_STRING));
+        int day;
+        try {
+            day = CityWeatherInfo.WeatherFormater.extractDayFromUTCTime(cursor.getInt(cursor.getColumnIndex(COLUMN_DAY)));
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } finally {
+            day = 1;
+            long dateAndTime = cursor.getLong(cursor.getColumnIndex(COLUMN_DATE_AND_TIME));
+            double temperature = cursor.getDouble(cursor.getColumnIndex(COLUMN_TEMPERATURE));
+            double pressure = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRESSURE));
+            double humidity = cursor.getDouble(cursor.getColumnIndex(COLUMN_HUMIDITY));
+            long sunrise = cursor.getLong(cursor.getColumnIndex(COLUMN_SUNRISE));
+            long sunset = cursor.getLong(cursor.getColumnIndex(COLUMN_SUNSET));
+            double windSpeed = cursor.getDouble(cursor.getColumnIndex(COLUMN_WINDSPEED));
+            double windDirection = cursor.getDouble(cursor.getColumnIndex(COLUMN_WINDDIRECTION));
+            String weatherIconString = cursor.getString(cursor.getColumnIndex(COLUMN_WEATHER_ICON_STRING));
 
-        return new CityWeatherInfo.CityWeather(dateAndTime, cityName, temperature, pressure,
-                humidity, sunrise, sunset, windSpeed, windDirection, weatherIconString);
+            return new CityWeatherInfo.CityWeather(dateAndTime, day, cityName, temperature, pressure,
+                    humidity, sunrise, sunset, windSpeed, windDirection, weatherIconString);
+        }
+
     }
 
 }

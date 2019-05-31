@@ -1,0 +1,1 @@
+make: `F:/Aleksa/Desktop_Podaci/Dokumenti/Faks/PNRS1/WeatherForecast/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libCustomJNI.so' is up to date.

@@ -1,0 +1,33 @@
+{
+  "buildFiles": [
+    "F:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\Android.mk",
+    "F:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\Application.mk"
+  ],
+  "cleanCommands": [
+    "F:\\Aleksa\\Programi\\AndroidSDK\\SDK\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dF:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\Android.mk NDK_APPLICATION_MK\u003dF:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003dF:/Aleksa/Desktop_Podaci/Dokumenti/Faks/PNRS1/WeatherForecast/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dF:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\ndkBuild\\release\\lib clean"
+  ],
+  "libraries": {
+    "CustomJNI-release-arm64-v8a": {
+      "buildCommand": "F:\\Aleksa\\Programi\\AndroidSDK\\SDK\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dF:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\Android.mk NDK_APPLICATION_MK\u003dF:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003dF:/Aleksa/Desktop_Podaci/Dokumenti/Faks/PNRS1/WeatherForecast/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dF:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\ndkBuild\\release\\lib F:/Aleksa/Desktop_Podaci/Dokumenti/Faks/PNRS1/WeatherForecast/app/build/intermediates/ndkBuild/release/obj/local/arm64-v8a/libCustomJNI.so",
+      "toolchain": "toolchain-arm64-v8a",
+      "abi": "arm64-v8a",
+      "artifactName": "CustomJNI",
+      "files": [
+        {
+          "src": "F:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\src\\main\\jni\\CustomJNI.cpp",
+          "flags": "-target aarch64-none-linux-android21 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot F:/Aleksa/Programi/AndroidSDK/SDK/ndk-bundle/build//../toolchains/llvm/prebuilt/windows-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-addrsig -fno-exceptions -fno-rtti -fpic -O2 -DNDEBUG -IF:/Aleksa/Programi/AndroidSDK/SDK/ndk-bundle/build//../sources/cxx-stl/system/include -IF:/Aleksa/Desktop_Podaci/Dokumenti/Faks/PNRS1/WeatherForecast/app/src/main/jni -DANDROID -Wa,--noexecstack -Wformat -Werror\u003dformat-security"
+        }
+      ],
+      "output": "F:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\ndkBuild\\release\\obj\\local\\arm64-v8a\\libCustomJNI.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-arm64-v8a": {
+      "cppCompilerExecutable": "F:\\Aleksa\\Programi\\AndroidSDK\\SDK\\ndk-bundle\\build\\..\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

@@ -1,16 +1,33 @@
 package project.weatherforecast;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
-public final class CityWeatherInfo {
+final class CityWeatherInfo {
 
     private CityWeatherInfo() {
 
     }
+
+    public enum TemperatureUnit {
+        CELSIUS, FAHRENHEIT
+    }
+
+    final static long time = Calendar.getInstance().getTime().getTime();
+    public static final CityWeather[] weatherSamples = {
+            new CityWeather(time, 1, "Sombor", 20, 998, 50, time, time + 36000000, 30, 20, "01d"),
+            new CityWeather(time, 2, "Sombor", 23, 1023, 70, time, time + 36000000, 50, 10, "02d"),
+            new CityWeather(time, 3, "Sombor", 7, 1020, 60, time, time + 36000000, 60, 50, "03d"),
+            new CityWeather(time, 4, "Sombor", 14, 1010, 70, time, time + 36000000, 70, 70, "04d"),
+            new CityWeather(time, 5, "Sombor", 5, 995, 80, time, time + 36000000, 20, 80, "09d"),
+            new CityWeather(time, 6, "Sombor", 17, 987, 70, time, time + 36000000, 5, 90, "010d"),
+            new CityWeather(time, 7, "Sombor", 26, 1055, 60, time, time + 36000000, 10, 120, "011d")
+    };
 
     private static final WindDirection[] windDirections = {
             new WindDirection("SEVERNI", 348.75, 11.25),
@@ -33,6 +50,7 @@ public final class CityWeatherInfo {
 
     public static class CityWeather {
         long mDateAndTime;
+        int mDay;
         String mCityName;
         double mTemperature;
         double mPressure;
@@ -43,16 +61,18 @@ public final class CityWeatherInfo {
         double mWindDirection;
         String mWeatherIconString;
 
-        public CityWeather(long mDateAndTime,
-                            String mCityName,
-                            double mTemperature,
-                            double mPressure,
-                            double mHumidity,
-                            long mSunrise,
-                            long mSunset,
-                            double mWindSpeed,
-                            double mWindDirection, String mWeatherIcon) {
+        CityWeather(long mDateAndTime,
+                    int day,
+                    String mCityName,
+                    double mTemperature,
+                    double mPressure,
+                    double mHumidity,
+                    long mSunrise,
+                    long mSunset,
+                    double mWindSpeed,
+                    double mWindDirection, String mWeatherIcon) {
             this.mDateAndTime = mDateAndTime;
+            this.mDay = day;
             this.mCityName = mCityName;
             this.mTemperature = mTemperature;
             this.mPressure = mPressure;
@@ -64,6 +84,8 @@ public final class CityWeatherInfo {
             this.mWeatherIconString = mWeatherIcon;
         }
 
+        int getDay() { return mDay; }
+
         long getDateAndTime() {
             return mDateAndTime;
         }
@@ -72,35 +94,35 @@ public final class CityWeatherInfo {
             return mCityName;
         }
 
-        public double getTemperature() {
+        double getTemperature() {
             return mTemperature;
         }
 
-        public double getPressure() {
+        double getPressure() {
             return mPressure;
         }
 
-        public double getHumidity() {
+        double getHumidity() {
             return mHumidity;
         }
 
-        public long getSunrise() {
+        long getSunrise() {
             return mSunrise;
         }
 
-        public long getSunset() {
+        long getSunset() {
             return mSunset;
         }
 
-        public double getWindSpeed() {
+        double getWindSpeed() {
             return mWindSpeed;
         }
 
-        public double getWindDirection() {
+        double getWindDirection() {
             return mWindDirection;
         }
 
-        public String getWeatherIconString() {
+        String getWeatherIconString() {
             return mWeatherIconString;
         }
 
@@ -162,38 +184,37 @@ public final class CityWeatherInfo {
             return null;
         }
 
-        public static String formatWindSpeed(double windSpeed) {
+        static String formatWindSpeed(double windSpeed) {
             return windSpeed + " m/s";
         }
 
-        public static  String formatTemperature(double temperature, String unit, boolean convert) {
+        static  String formatTemperature(double temperature, String unit) {
             Log.d("PASSED TEMPERATURE",  Double.toString(temperature));
-            if(convert) {
-                if(unit.equals("F")) {
-                    temperature = temperature*9/5 + 32;
-                } else if (unit.equals("C")) {
-                    temperature = (temperature - 32) * 5/9;
-                }
-            }
-            temperature = Math.round(temperature*100)/100;
-            return Double.toString(temperature) + " " + unit + "°";
+            temperature = Math.round(temperature*100)/100.0;
+            return temperature + " " + unit + "°";
         }
 
-        public static String formatUTCTime(long time) {
+        static String formatUTCTime(long time) {
             Date date = new Date(time);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
             return simpleDateFormat.format(date);
         }
 
-        public static String formatPressure(double pressure) { return pressure + " hPa"; }
+        static int extractDayFromUTCTime(long time) {
+            Date date = new Date(time);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("u");
+            return Integer.parseInt(simpleDateFormat.format(date));
+        }
 
-        public static String formatHumidity(double humidity) {
+        static String formatPressure(double pressure) { return pressure + " hPa"; }
+
+        static String formatHumidity(double humidity) {
             return humidity + " %";
         }
 
-        public static String formatWeatherPNG(String png) { return "w" + png; }
+        static String formatWeatherPNG(String png) { return "w" + png; }
 
-        public static String formatCityNameForURL(String cityName) {
+        static String formatCityNameForURL(String cityName) {
             return cityName.replaceAll(" ", "%20");
         }
 

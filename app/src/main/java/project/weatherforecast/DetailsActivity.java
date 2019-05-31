@@ -5,11 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,10 +25,10 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,13 +43,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     public static final String BASE_URL = "https://openweathermap.org/data/2.5/weather?q=";
     public static final String API_ID = "&units=metric&appid=b6907d289e10d714a6e88b30761fae22";
-    String cityName;
+    String mCityName;
     String full_url = BASE_URL;
     String prev_jedinica = "C";
+    int mDay;
 
-    final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM 'u' hh:mm", Locale.US);
-    final Calendar calendar = Calendar.getInstance();
-    final Date date = calendar.getTime();
     Resources resources;
     HttpHelper httpHelper;
     double temperature;
@@ -58,11 +55,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     CityWeatherInfo.CityWeather cityWeather;
     ServiceConnection connection;
     boolean mBound = false;
+    boolean mApplicationRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        resources = getResources();
 
         /* VIEW INITIALIZATION BEGIN */
         tTemperatura = findViewById(R.id.textViewTemperatura);
@@ -96,7 +95,32 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         bStopService.setOnClickListener(this);
         /* INTERFACE END */
 
+        /* CONFIGURATING VIEW BEGIN */
+        bTemperatura.setBackgroundColor(resources.getColor(R.color.colorGray));
+        bIzlazakIZalazak.setBackgroundColor(resources.getColor(R.color.colorGray));
+        bVetar.setBackgroundColor(resources.getColor(R.color.colorGray));
+        lTemperatura.setVisibility(View.GONE);
+        lIzlazakIZalazak.setVisibility(View.GONE);
+        lVetar.setVisibility(View.GONE);
+        /* CONFIGURATING VIEW END */
+
+        /* LOCATION CONFIGURATION BEGIN */
+        String location = resources.getString(R.string.lokacija_str);
+        mCityName = "";
+        try {
+            mCityName = getIntent().getExtras().getString(location);
+            full_url += CityWeatherInfo.WeatherFormater.formatCityNameForURL(mCityName) + API_ID;
+            location += mCityName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            tLokacija.setText(resources.getString(R.string.erorr_location));
+        }
+        tLokacija.setText(location);
+        /* LOCATION CONFIGURATION END */
+
         /* UTILITIES SETUP BEGIN */
+        httpHelper = new HttpHelper();
+        mDay = CityWeatherInfo.WeatherFormater.extractDayFromUTCTime(Calendar.getInstance().getTime().getTime());
         connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -111,66 +135,16 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 mBound = false;
             }
         };
-        httpHelper = new HttpHelper();
-        resources = getResources();
-        Intent serviceIntent = new Intent(this, CustomService.class);
-        startService(serviceIntent);
-
-        //bindService( new Intent(this, CustomService.class), connection, Context.BIND_AUTO_CREATE);
         /* UTILITIES SETUP END */
 
-        /* CONFIGURATING VIEW BEGIN */
-        bTemperatura.setBackgroundColor(resources.getColor(R.color.colorGray));
-        bIzlazakIZalazak.setBackgroundColor(resources.getColor(R.color.colorGray));
-        bVetar.setBackgroundColor(resources.getColor(R.color.colorGray));
-        lTemperatura.setVisibility(View.GONE);
-        lIzlazakIZalazak.setVisibility(View.GONE);
-        lVetar.setVisibility(View.GONE);
-        /* CONFIGURATING VIEW END */
-
-        /* SPINNER SETUP BEGIN */
+        /* SPINNER INIT BEGIN */
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.jedinica_str_arr, android.R.layout.simple_spinner_dropdown_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerJedinica.setAdapter(spinnerAdapter);
-        spinnerJedinica.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String jedinica;
-                if(!(jedinica = spinnerJedinica.getItemAtPosition(position).toString()).equals(prev_jedinica)) {
-                    prev_jedinica = jedinica;
-                    String pom = resources.getString(R.string.temperatura_str) +
-                            CityWeatherInfo.WeatherFormater.formatTemperature(temperature, prev_jedinica, true);
-                    tTemperatura.setText(pom);
-                    if(jedinica.equals("F")) {
-                        temperature = temperature * 9/5 + 32;
-                    } else {
-                        temperature = (temperature - 32)*5/9;
-                    }
-                }
-            }
+        /* SPINNER INIT END */
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        /* SPINNER SETUP END */
-
-        /* LOCATION CONFIGURATION BEGIN */
-        String location = resources.getString(R.string.lokacija_str);
-        cityName = "";
-        try {
-            cityName = getIntent().getExtras().getString(location);
-            full_url += CityWeatherInfo.WeatherFormater.formatCityNameForURL(cityName) + API_ID;
-            location += cityName;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            tLokacija.setText(resources.getString(R.string.erorr_location));
-        }
-        tLokacija.setText(location);
-        /* LOCATION CONFIGURATION END */
-
-        if(MainActivity.dbHelper.readCityWeather(cityName) == null) {
+        /* READING WEATHER FROM DATABASE BEGIN */
+        if((cityWeather = MainActivity.dbHelper.readCityWeather(mCityName, CityWeatherInfo.WeatherFormater.extractDayFromUTCTime(Calendar.getInstance().getTime().getTime()))) == null) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -196,10 +170,36 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }).start();
         } else {
-            cityWeather = MainActivity.dbHelper.readCityWeather(cityName);
             refreshWeatherView();
+            temperature = cityWeather.getTemperature();
         }
-        SystemClock.sleep(500);
+        /* READING WEATHER FROM DATABASE END */
+
+        SystemClock.sleep(1000);
+
+        /* SPINNER INTERFACE INIT BEGIN */
+        spinnerJedinica.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String jedinica = spinnerJedinica.getItemAtPosition(position).toString();
+                if(!jedinica.equals(prev_jedinica)) {
+                    prev_jedinica = jedinica;
+
+                    if(jedinica.equals("F")) {
+                        temperature = CustomJNI.convert_temperature(temperature, 1);
+                    } else {
+                        temperature = CustomJNI.convert_temperature(temperature, 0);;
+                    }
+                    tTemperatura.setText(resources.getString(R.string.temperatura_str) + CityWeatherInfo.WeatherFormater.formatTemperature(temperature, jedinica));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        /* SPINNER INTERFACE INIT END */
     }
 
 
@@ -261,14 +261,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.buttonStatistika:
                 Intent intent = new Intent(this, StatisticsActivity.class);
-                intent.putExtra(resources.getString(R.string.lokacija_str), cityName);
+                intent.putExtra(resources.getString(R.string.lokacija_str), mCityName);
                 SimpleDateFormat pom = new SimpleDateFormat("u", Locale.US);
                 intent.putExtra(resources.getString(R.string.dan_str), pom.format(cityWeather.getDateAndTime()));
                 startActivity(intent);
                 break;
 
             case R.id.imageButtonRefresh:
-                MainActivity.dbHelper.deleteCityWeather(cityName);
+                MainActivity.dbHelper.deleteCityWeather(mCityName, CityWeatherInfo.WeatherFormater.extractDayFromUTCTime(Calendar.getInstance().getTime().getTime()));
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -301,7 +301,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     private void refreshWeatherView() {
         String pom;
         pom = resources.getString(R.string.temperatura_str) +
-                CityWeatherInfo.WeatherFormater.formatTemperature(cityWeather.getTemperature(), spinnerJedinica.getSelectedItem().toString(), false);
+                CityWeatherInfo.WeatherFormater.formatTemperature(cityWeather.getTemperature(), spinnerJedinica.getSelectedItem().toString());
         tTemperatura.setText(pom);
 
         pom = resources.getString(R.string.vlaznost_str) +
@@ -334,6 +334,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 getApplicationContext().getPackageName());
         imageWeatherPNG.setImageResource(imageId);
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM 'u' hh:mm", Locale.US);
         String dan = resources.getString(R.string.dan_str) + simpleDateFormat.format(cityWeather.getDateAndTime());
         tDan.setText(dan);
     }
@@ -346,10 +347,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         final JSONObject sysObject = jsonObject.getJSONObject("sys"); //used for sunrise and sunset
         final JSONArray weatherArray = jsonObject.getJSONArray("weather");
         final JSONObject weatherObject = weatherArray.getJSONObject(0);
-        Log.d("JSON OBJECT ACQUIRING:", "FINISHED. FETCHED CITY: " + cityName);
+        Log.d("JSON OBJECT ACQUIRING:", "FINISHED. FETCHED CITY: " + mCityName);
 
-        long dateUnix = date.getTime();
+        long dateUnix = Calendar.getInstance().getTime().getTime();
+        int day = CityWeatherInfo.WeatherFormater.extractDayFromUTCTime(dateUnix);
+        Log.d("FUN", "FACT");
         temperature = Double.parseDouble(mainObject.getString("temp"));
+        Log.d("TEMPERATURA: ", "FETCHOVANA" + temperature);
         double pressure = Double.parseDouble(mainObject.getString("pressure"));
         double humidity = Double.parseDouble(mainObject.getString("humidity"));
         double windDegrees;
@@ -364,12 +368,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         String weatherIconString = weatherObject.getString("icon");
         Log.d("JSON OBJECT ACQUIRING:", "Over");
 
-        cityWeather = new CityWeatherInfo.CityWeather(dateUnix, cityName, temperature, pressure, humidity, sunrise, sunset, windSpeed, windDegrees, weatherIconString);
+        cityWeather = new CityWeatherInfo.CityWeather(dateUnix, day, mCityName, temperature, pressure, humidity, sunrise, sunset, windSpeed, windDegrees, weatherIconString);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        startService(new Intent(this, CustomService.class).putExtra(resources.getString(R.string.lokacija_str), mCityName).putExtra(resources.getString(R.string.dan_str), mDay));
     }
 
     @Override
@@ -379,6 +384,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onDestroy() {
+        stopService(new Intent(this, CustomService.class));
         super.onDestroy();
     }
 
@@ -390,7 +396,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        refreshWeatherView();
+        if(mApplicationRun) {
+            refreshWeatherView();
+        }
+        mApplicationRun = true;
     }
 
     @Override

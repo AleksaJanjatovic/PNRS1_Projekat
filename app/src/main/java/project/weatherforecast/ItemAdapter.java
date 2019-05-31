@@ -1,16 +1,15 @@
 package project.weatherforecast;
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class ItemAdapter extends BaseAdapter {
@@ -30,13 +29,14 @@ public class ItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-       Object rv = null;
+       Object rv;
        try {
            rv = mCityListItems.get(position);
+           return rv;
        } catch (IndexOutOfBoundsException e) {
            e.printStackTrace();
        }
-       return rv;
+       return null;
     }
 
     public void addCity(CityListItem city) {
@@ -74,8 +74,8 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     private class ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        public TextView cityName = null;
-        public RadioButton citySelected = null;
+        public TextView cityName;
+        public RadioButton citySelected;
 
         public ViewHolder(View v){
             cityName = v.findViewById(R.id.listItemTextView);
@@ -88,7 +88,7 @@ public class ItemAdapter extends BaseAdapter {
         public void onClick(View v) {
             //SystemClock.sleep(300);
             for(int i = 0; i < mCityListItems.size(); i++){
-                if(mCityListItems.get(i).getTextCity().equals(cityName)) {
+                if(cityName.equals(mCityListItems.get(i).getTextCity())) {
                     continue;
                 }
                 mCityListItems.get(i).setRadioCity(false);
@@ -104,7 +104,7 @@ public class ItemAdapter extends BaseAdapter {
         public boolean onLongClick(View v) {
             for(int i = 0; i < mCityListItems.size(); i++) {
                 if(mCityListItems.get(i).getTextCity().equals(((TextView) v).getText().toString())) {
-                    MainActivity.dbHelper.deleteCityWeather(mCityListItems.get(i).getTextCity());
+                    MainActivity.dbHelper.deleteCityWeathers(mCityListItems.get(i).getTextCity());
                     mCityListItems.remove(i);
                     break;
                 }

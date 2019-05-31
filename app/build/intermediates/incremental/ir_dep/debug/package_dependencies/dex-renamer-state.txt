@@ -1,4 +1,4 @@
-#Sat May 25 15:52:53 CEST 2019
+#Fri May 31 04:39:40 CEST 2019
 base.0=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\10
 path.0=classes.dex
 renamed.0=classes.dex

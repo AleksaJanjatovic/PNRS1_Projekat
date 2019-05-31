@@ -1,15 +1,14 @@
 package project.weatherforecast;
 
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class StatisticsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +24,7 @@ public class StatisticsActivity extends AppCompatActivity implements View.OnClic
     ArrayList<CityWeatherInfo.CityWeather> mCityWeathersCopy;
     CityWeatherInfo.CityWeather[] mWeekDaysCityWeathers;
     boolean coldCitiesToogle = false, warmCitiesToogle = false;
+    String mCityNameString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +68,7 @@ public class StatisticsActivity extends AppCompatActivity implements View.OnClic
                 findViewById(R.id.textViewSubotaVlaznost),
                 findViewById(R.id.textViewNedeljaVlaznost)};
 
+
         mMinTemperaturaDan = findViewById(R.id.textViewMinTemperaturaDan);
         mMaxTemperaturaDan = findViewById(R.id.textViewMaxTemperaturaDan);
         mMinTemperaturaVrednost = findViewById(R.id.textViewMinTemperaturaVrednost);
@@ -78,14 +79,14 @@ public class StatisticsActivity extends AppCompatActivity implements View.OnClic
         mColdImageButton.setOnClickListener(this);
         mWarmImageButton.setOnClickListener(this);
         try {
-            mCityName.setText(getIntent().getExtras().getString(getResources().getString(R.string.lokacija_str)));
+            mCityNameString = getIntent().getExtras().getString(getResources().getString(R.string.lokacija_str));
+            mCityName.setText(mCityNameString);
+            mDani[Integer.parseInt(getIntent().getExtras().getString(getResources().getString(R.string.dan_str))) - 1].setTypeface(null, Typeface.BOLD);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        mDani[Integer.parseInt(getIntent().getExtras().getString(getResources().getString(R.string.dan_str))) - 1].setTypeface(null, Typeface.BOLD);
 
         mCityWeathers = new ArrayList<>(Arrays.asList(MainActivity.dbHelper.readAllCityWeathers()));
-        mCityWeathersCopy = new ArrayList<>(mCityWeathers);
         fillTheWeek();
         setMaxTemperatureView();
         setMinTemperatureView();
@@ -153,12 +154,6 @@ public class StatisticsActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private CityWeatherInfo.CityWeather popRandomCity() {
-        Random rand = new Random();
-        int randomNumber = rand.nextInt(mCityWeathersCopy.size());
-        return mCityWeathersCopy.remove(randomNumber);
-    }
-
     private void setMaxTemperatureView() {
         double extreme = -200, newValue;
         int index = 0;
@@ -189,17 +184,16 @@ public class StatisticsActivity extends AppCompatActivity implements View.OnClic
         mMinTemperaturaVrednost.setText(Double.toString(mWeekDaysCityWeathers[index].getTemperature()));
     }
 
+
+
     private void fillTheWeek() {
-        if(mCityWeathersCopy.size() >= 7) {
-            mWeekDaysCityWeathers = new CityWeatherInfo.CityWeather[] {
-                    popRandomCity(),
-                    popRandomCity(),
-                    popRandomCity(),
-                    popRandomCity(),
-                    popRandomCity(),
-                    popRandomCity(),
-                    popRandomCity()
-            };
+        mWeekDaysCityWeathers = new CityWeatherInfo.CityWeather[7];
+        CityWeatherInfo.CityWeather pom;
+        for(int i = 1; i <= 7; i++) {
+            if((pom = MainActivity.dbHelper.readCityWeather(mCityNameString, i)) == null) {
+                pom = CityWeatherInfo.weatherSamples[i - 1];
+            }
+            mWeekDaysCityWeathers[i - 1] = pom;
         }
         for(int i = 0; i < 7; i++) {
             fillADay(mTemperature[i], mPritisci[i], mVlaznost[i], mWeekDaysCityWeathers[i]);

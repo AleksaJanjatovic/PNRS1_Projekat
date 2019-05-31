@@ -1,10 +1,10 @@
 #Internal package file, do not edit.
-#Sun May 26 18:54:49 CEST 2019
+#Fri May 31 05:03:29 CEST 2019
 4.path=classes.dex
 8.set=DEX
 6.path=classes.dex
 0.baseType=DIRECTORY
-10.path=classes.dex
+10.path=lib/arm64-v8a/libCustomJNI.so
 5.baseType=DIRECTORY
 1.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\19
 8.path=classes.dex
@@ -12,8 +12,10 @@
 4.set=DEX
 5.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\15
 7.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\20
+11.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\21
 9.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\11
 1.baseType=DIRECTORY
+11.set=DEX
 0.set=DEX
 6.baseType=DIRECTORY
 7.set=DEX
@@ -23,22 +25,24 @@
 1.path=classes.dex
 7.baseType=DIRECTORY
 3.path=classes.dex
-10.set=DEX
+10.set=NATIVE_RESOURCE
 5.path=classes.dex
 0.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\17
 7.path=classes.dex
+11.path=classes.dex
 9.path=classes.dex
 6.set=DEX
 2.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\16
+11.baseType=DIRECTORY
 4.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\18
 3.baseType=DIRECTORY
 6.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12
-10.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\21
+10.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\stripDebugSymbol\\debug\\0
 8.base=F\:\\Aleksa\\Desktop_Podaci\\Dokumenti\\Faks\\PNRS1\\WeatherForecast\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\14
 2.set=DEX
 8.baseType=DIRECTORY
 9.set=DEX
-count=11
+count=12
 4.baseType=DIRECTORY
 5.set=DEX
 9.baseType=DIRECTORY
